@@ -1,25 +1,29 @@
 import discord
+from discord.flags import Intents
 from dotenv import load_dotenv
 import os
 load_dotenv()
 botToken=os.getenv("botToken")
 
-client= discord.Client()
-
-@client.event
-async def on_ready():
-    print('Bot is now online and ready to roll!')
+#sample emoji sentence:
+# React here with: :laughing: :100: :yum: 
 
 
-@client.event
-async def on_message(message):
-    if message.author ==client.user:
-        return 
-    if message.content== 'hello':
-        await message.channel.send('Welcome to test Channell')
-        return
-    
-    # await message.channel.send('follow random casualtiess')
+class MyClient(discord.client):
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.target_message_id=907365286838161459
+
+    async def on_ready(self):
+        print('Ready')
+    async def on_raw_reaction_add(self,payload):
+         pass #aici ai ramas min 13:42
+
+intents= discord.Intents.default()
+intents.members=True
+
+
+client= MyClient(intents=intents)
 
 
 client.run(botToken)
