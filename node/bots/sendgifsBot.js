@@ -4,7 +4,7 @@ client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 const fetch= require('node-fetch')
 client.login(process.env.botToken);
 
-client.on('ready',()=>{
+client.once('ready',()=>{
     console.log('ready')
 })
 
