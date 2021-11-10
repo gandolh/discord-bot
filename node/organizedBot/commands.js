@@ -8,7 +8,7 @@ const commands={
 
 
 const gotMessage= async(msg)=>{
-    if(msg.channel.id==process.env.botsTalkChanelId || msg.channel.id==process.env.loveChanell){
+    // if(msg.channel.id==process.env.botsTalkChanelId || msg.channel.id==process.env.loveChanell){
     try{
         let tokens=msg.content.split(' ')
         let command = tokens.shift();
@@ -19,7 +19,7 @@ const gotMessage= async(msg)=>{
     }catch(err){
         console.log('eh')
     }
-}
+// }
 }
 
 module.exports= gotMessage;
