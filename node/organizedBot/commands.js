@@ -1,9 +1,11 @@
 
 const nextlyrics= require('./commands/nextlyrics')
 const sendgif = require('./commands/sendgif')
+const {register} = require('./commands/blockchaincommands')
 const commands={
     'next': nextlyrics,
-    'gif': sendgif
+    'gif': sendgif,
+    'register': register
 }
 
 
@@ -18,6 +20,8 @@ const gotMessage= async(msg)=>{
         }
     }catch(err){
         console.log('eh')
+        console.log(err)
+
     }
 // }
 }

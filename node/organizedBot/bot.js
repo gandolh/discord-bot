@@ -7,4 +7,4 @@ client.login(process.env.botToken);
 client.once('ready',()=>{
     console.log('ready')
 })
-client.on('message',commandHandler)
+client.on('messageCreate',commandHandler)
