@@ -34,4 +34,16 @@ const register = async (msg,args)=>{
     msg.channel.send({ embeds: [exampleEmbed] });
 
 }
+
+
+const getBallance= async (msg,args)=>{
+    const username= args[0];
+    // console.log(username)
+    //daca nu e username ia-l default pe cel al authorului
+    //search userId with username on this channell
+    user_id='04729aaee497f99ff7ed4da9b7a5c23912da6533783b5cee16839b1e2628bc3413672b407a68c7a15a6fe3ea238b16f26e7a35755e258a0b9fb3d007da7a2e9c94'
+    const response =await axios.get(`http://localhost:8000/get_ballance?user_id=${user_id}`)
+    msg.channel.send(response.data.toString());
+}
 module.exports.register = register;
+module.exports.getBallance = getBallance;

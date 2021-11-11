@@ -35,7 +35,7 @@ IACoin.addTransaction(tx2);
 // Mine block
 IACoin.minePendingTransactions(myWalletAddress);
 
-console.log();
+console.log(myWalletAddress);
 console.log(`Balance is ${IACoin.getBalanceOfAddress(myWalletAddress)}`);
 
 // Uncomment this line if you want to test tampering with the chain
@@ -68,6 +68,14 @@ app.post('/register',(req,res)=>{
     userData=req.body; //to save into db
     res.send([publicKey,privateKey] )
     
+})
+
+
+app.get('/get_ballance',async (req,res)=>{
+    //interogate db to find public key for user with user_id
+    user_id=req.query.user_id;
+    const ballance= IACoin.getBalanceOfAddress(user_id)
+    res.send(ballance.toString())
 })
   app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
