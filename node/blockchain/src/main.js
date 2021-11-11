@@ -1,43 +1,49 @@
-// const { Blockchain, Transaction } = require('./blockchain');
-// const EC = require('elliptic').ec;
-// const ec = new EC('secp256k1');
-// // Your private key goes here
-// const myKey = ec.keyFromPrivate('7c4c45907dec40c91bab3480c39032e90049f1a44f3e18c3e07c23e3273995cf');
+const { Blockchain, Transaction } = require('./blockchain');
+const { createRegisterWallet } = require('./keygenerator.js');
+const EC = require('elliptic').ec;
+const ec = new EC('secp256k1');
+const express = require('express')
+const app = express()
+app.use(express.json());
+const port = 8000
 
-// // From that we can calculate your public key (which doubles as your wallet address)
-// const myWalletAddress = myKey.getPublic('hex');
+// Your private key goes here
+const myKey = ec.keyFromPrivate('7c4c45907dec40c91bab3480c39032e90049f1a44f3e18c3e07c23e3273995cf');
 
-// // Create new instance of Blockchain class
-// const IACoin = new Blockchain();
+// From that we can calculate your public key (which doubles as your wallet address)
+const myWalletAddress = myKey.getPublic('hex');
 
-// // Mine first block
-// IACoin.minePendingTransactions(myWalletAddress);
+// Create new instance of Blockchain class
+const IACoin = new Blockchain();
 
-// // Create a transaction & sign it with your key
-// const tx1 = new Transaction(myWalletAddress, 'address2', 100);
-// tx1.signTransaction(myKey);
-// IACoin.addTransaction(tx1);
+// Mine first block
+IACoin.minePendingTransactions(myWalletAddress);
 
-// // Mine block
-// IACoin.minePendingTransactions(myWalletAddress);
+// Create a transaction & sign it with your key
+const tx1 = new Transaction(myWalletAddress, 'address2', 100);
+tx1.signTransaction(myKey);
+IACoin.addTransaction(tx1);
 
-// // Create second transaction
-// const tx2 = new Transaction(myWalletAddress, 'address1', 50);
-// tx2.signTransaction(myKey);
-// IACoin.addTransaction(tx2);
+// Mine block
+IACoin.minePendingTransactions(myWalletAddress);
 
-// // Mine block
-// IACoin.minePendingTransactions(myWalletAddress);
+// Create second transaction
+const tx2 = new Transaction(myWalletAddress, 'address1', 50);
+tx2.signTransaction(myKey);
+IACoin.addTransaction(tx2);
 
-// console.log();
-// console.log(`Balance is ${IACoin.getBalanceOfAddress(myWalletAddress)}`);
+// Mine block
+IACoin.minePendingTransactions(myWalletAddress);
 
-// // Uncomment this line if you want to test tampering with the chain
-// // IACoin.chain[1].transactions[0].amount = 10;
+console.log();
+console.log(`Balance is ${IACoin.getBalanceOfAddress(myWalletAddress)}`);
 
-// // Check if the chain is valid
-// console.log();
-// console.log('Blockchain valid?', IACoin.isChainValid() ? 'Yes' : 'No');
+// Uncomment this line if you want to test tampering with the chain
+// IACoin.chain[1].transactions[0].amount = 10;
+
+// Check if the chain is valid
+console.log();
+console.log('Blockchain valid?', IACoin.isChainValid() ? 'Yes' : 'No');
 
 
 
@@ -47,3 +53,22 @@
 // adresa de genesis cu multi bani la inceput ca sa dea rewarduri si sa dea
 // penaltyuri
 // also mysql cu key-urile publice si discord name. 
+
+
+
+
+app.all('/', (req, res) => {
+    res.send({status:'it\'s alive!'}).status(200)
+  })
+
+app.post('/register',(req,res)=>{
+
+    let publicKey,privateKey;
+    [publicKey,privateKey] = createRegisterWallet();
+    userData=req.body; //to save into db
+    res.send([publicKey,privateKey] )
+    
+})
+  app.listen(port, () => {
+    console.log(`Example app listening at http://localhost:${port}`)
+  })
