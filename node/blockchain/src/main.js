@@ -42,20 +42,31 @@ console.log(`Balance is ${IACoin.getBalanceOfAddress(myWalletAddress)}`);
 // IACoin.chain[1].transactions[0].amount = 10;
 
 // Check if the chain is valid
-console.log();
 console.log('Blockchain valid?', IACoin.isChainValid() ? 'Yes' : 'No');
 
 
 
-// go express here
-//creare la start server.
-// post pentru tranzactii,mine
-// adresa de genesis cu multi bani la inceput ca sa dea rewarduri si sa dea
-// penaltyuri
-// also mysql cu key-urile publice si discord name. 
+//db interaction
+
+
+const knex = require('knex')({
+  client: 'sqlite3',
+  connection: {
+    filename: './dbs/blockchainData.db',
+
+  },
+});
+
+const querries_test= async()=>{
+  const selectedRows = await knex('Users')
+      .select('*')
+    console.log(selectedRows)
+}
+// querries_test();
 
 
 
+//end db interaction
 
 app.all('/', (req, res) => {
     res.send({status:'it\'s alive!'}).status(200)
@@ -66,6 +77,8 @@ app.post('/register',(req,res)=>{
     let publicKey,privateKey;
     [publicKey,privateKey] = createRegisterWallet();
     userData=req.body; //to save into db
+
+
     res.send([publicKey,privateKey] )
     
 })
@@ -80,3 +93,9 @@ app.get('/get_ballance',async (req,res)=>{
   app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
   })
+
+
+
+  // send --- loose send la genesis block
+  //borrow/lend from bot
+  //reward --- la conditii

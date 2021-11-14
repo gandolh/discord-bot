@@ -2,11 +2,13 @@
 const nextlyrics= require('./commands/nextlyrics')
 const sendgif = require('./commands/sendgif')
 const {register,getBallance} = require('./commands/blockchaincommands')
+const {roll_pacanea } = require('./commands/pacaneacommands')
 const commands={
     'next': nextlyrics,
     'gif': sendgif,
     'register': register,
-    'getballance':getBallance
+    'getballance':getBallance,
+    'rollpacanea':roll_pacanea
 }
 
 
