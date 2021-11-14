@@ -41,11 +41,13 @@ const registerAttempt= async(userData)=>{
     // ThiUserRow = await knex('Users')
     // .select('*').where('UserId',userData.user_id).first();
     registeredData.error=false;
+    registeredData.publicKey=publicKey
+  }else{
+    registeredData.publicKey = ThiUserRow.PublicKey
   }
   
     // const newUserData = await knex('Users')
     // .select('*').where(Id==idInsertedRow)
-  // console.log(selectedRows)
     return registeredData;
 
 }
@@ -64,11 +66,12 @@ app.all('/', (req, res) => {
     res.send({status:'it\'s alive!'}).status(200)
   })
 
-app.post('/register',(req,res)=>{
+app.post('/register',async (req,res)=>{
 
 
     userData=req.body;
-    let registeredData=registerAttempt(userData);
+    let registeredData= await registerAttempt(userData);
+
     res.send(registeredData)
     
 })
@@ -77,7 +80,10 @@ app.post('/register',(req,res)=>{
 app.get('/get_ballance',async (req,res)=>{
     //interogate db to find public key for user with user_id
     user_id=req.query.user_id;
-    const ballance= IACoin.getBalanceOfAddress(user_id)
+    publicKey= await knex('Users')
+    .select('PublicKey').where('UserId',user_id).first().publicKey;
+    console.log(publicKey)
+    const ballance= IACoin.getBalanceOfAddress(publicKey)
     res.send(ballance.toString())
 })
   app.listen(port, () => {

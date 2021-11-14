@@ -1,7 +1,6 @@
 const crypto = require('crypto');
 const EC = require('elliptic').ec;
 const ec = new EC('secp256k1');
-const debug = require('debug')('savjeecoin:blockchain');
 
 class Transaction {
 
@@ -71,7 +70,6 @@ class Block {
       this.hash = this.calculateHash();
     }
 
-    debug(`Block mined: ${this.hash}`);
   }
 
 
@@ -112,7 +110,6 @@ class Blockchain {
     const block = new Block(Date.now(), this.pendingTransactions, this.getLatestBlock().hash);
     block.mineBlock(this.difficulty);
 
-    debug('Block successfully mined!');
     this.chain.push(block);
 
     this.pendingTransactions = [];
@@ -139,7 +136,6 @@ class Blockchain {
     }
 
     this.pendingTransactions.push(transaction);
-    debug('transaction added: %s', transaction);
   }
 
 
@@ -158,7 +154,6 @@ class Blockchain {
       }
     }
 
-    debug('getBalanceOfAdrees: %s', balance);
     return balance;
   }
 
@@ -174,7 +169,6 @@ class Blockchain {
       }
     }
 
-    debug('get transactions for wallet count: %s', txs.length);
     return txs;
   }
 
