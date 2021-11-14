@@ -19,14 +19,14 @@ function Pacanea(){
          let castig = [choose(place_holder),choose(place_holder),choose(place_holder),choose(place_holder),choose(place_holder)]
          panel.push(castig)
         if (i == 3){
-            for (i of castig){
-                let control =count_pacanea(castig,i)
+            for (j of castig){
+                let control =count_pacanea(castig,j)
                 if (control >= 3)
-                    mula += odds_list[i]
+                    mula += odds_list[j]
             }
         }
     }
-    console.log(mula)
+    // console.log(mula)
     return panel
 
 }
@@ -45,6 +45,7 @@ const roll_pacanea = (msg,args)=>{
     //  msg.channel.send(replies[++k % replies.length])
     // let x=place_holder[Math.floor(Math.random()*place_holder.length)];
     let panel=Pacanea()
+    console.log(panel)
     msg.channel.send(buildPanelPacanea(panel))
      
 }

@@ -108,7 +108,7 @@ class Blockchain {
     this.pendingTransactions.push(rewardTx);
 
     const block = new Block(Date.now(), this.pendingTransactions, this.getLatestBlock().hash);
-    block.mineBlock(this.difficulty);
+    // block.mineBlock(this.difficulty);
 
     this.chain.push(block);
 

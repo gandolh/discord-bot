@@ -82,9 +82,13 @@ app.get('/get_ballance',async (req,res)=>{
     user_id=req.query.user_id;
     publicKey= await knex('Users')
     .select('PublicKey').where('UserId',user_id).first().publicKey;
-    console.log(publicKey)
-    const ballance= IACoin.getBalanceOfAddress(publicKey)
-    res.send(ballance.toString())
+    if(publicKey==undefined)
+    res.send('Utilizator neinregistrat. Va rugam introduceti comanda !register')
+    else{
+      const ballance= IACoin.getBalanceOfAddress(publicKey)
+      res.send(ballance.toString())
+
+    }
 })
   app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
