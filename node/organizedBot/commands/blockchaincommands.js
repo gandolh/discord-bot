@@ -15,9 +15,7 @@ const register = async (msg,args)=>{
         username:  msg.author.username,
         discriminator: msg.author.discriminator
     })
-
-    let publicKey,privateKey;
-    [publicKey,privateKey] =[response.data[0],response.data[1]];
+    registeredData =response.data
 
     const exampleEmbed = new MessageEmbed()
 	.setColor('#2ECC71')
@@ -25,8 +23,8 @@ const register = async (msg,args)=>{
 	.setDescription('V-ati creat cu success un wallet pe IACoin Blockhain')
 	.setThumbnail(image_url)
 	.addFields(
-		{ name: 'Cheie publica', value: publicKey, inline: false },
-		{ name: 'Cheie privata', value: privateKey, inline: false },
+		{ name: 'Cheie publica', value: registeredData.publicKey, inline: false },
+		{ name: 'Cheie privata', value: 'E SECRETA MAN', inline: false },
 		{ name: 'comanda verificare sold', value: 'not implemented yet', inline: false },
 	)
 	.setTimestamp()

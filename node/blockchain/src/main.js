@@ -7,45 +7,9 @@ const app = express()
 app.use(express.json());
 const port = 8000
 
-// Your private key goes here
-const myKey = ec.keyFromPrivate('7c4c45907dec40c91bab3480c39032e90049f1a44f3e18c3e07c23e3273995cf');
-
-// From that we can calculate your public key (which doubles as your wallet address)
-const myWalletAddress = myKey.getPublic('hex');
-
 // Create new instance of Blockchain class
 const IACoin = new Blockchain();
-
 // Mine first block
-IACoin.minePendingTransactions(myWalletAddress);
-
-// Create a transaction & sign it with your key
-const tx1 = new Transaction(myWalletAddress, 'address2', 100);
-tx1.signTransaction(myKey);
-IACoin.addTransaction(tx1);
-
-// Mine block
-IACoin.minePendingTransactions(myWalletAddress);
-
-// Create second transaction
-const tx2 = new Transaction(myWalletAddress, 'address1', 50);
-tx2.signTransaction(myKey);
-IACoin.addTransaction(tx2);
-
-// Mine block
-IACoin.minePendingTransactions(myWalletAddress);
-
-console.log(myWalletAddress);
-console.log(`Balance is ${IACoin.getBalanceOfAddress(myWalletAddress)}`);
-
-// Uncomment this line if you want to test tampering with the chain
-// IACoin.chain[1].transactions[0].amount = 10;
-
-// Check if the chain is valid
-console.log('Blockchain valid?', IACoin.isChainValid() ? 'Yes' : 'No');
-
-
-
 //db interaction
 
 
@@ -57,6 +21,34 @@ const knex = require('knex')({
   },
 });
 
+const registerAttempt= async(userData)=>{
+  let publicKey,privateKey;
+  [publicKey,privateKey] = createRegisterWallet();
+  let registeredData={
+    'publicKey':publicKey,
+    error:true
+  }
+  let ThiUserRow;
+  ThiUserRow= await knex('Users')
+  .select('*').where('UserId',userData.user_id).first();
+
+  if(ThiUserRow==null){
+    await knex('Users').insert({
+      'UserId': userData.user_id,
+      'PublicKey':publicKey,
+      'PrivateKey': privateKey
+    })
+    // ThiUserRow = await knex('Users')
+    // .select('*').where('UserId',userData.user_id).first();
+    registeredData.error=false;
+  }
+  
+    // const newUserData = await knex('Users')
+    // .select('*').where(Id==idInsertedRow)
+  // console.log(selectedRows)
+    return registeredData;
+
+}
 const querries_test= async()=>{
   const selectedRows = await knex('Users')
       .select('*')
@@ -74,12 +66,10 @@ app.all('/', (req, res) => {
 
 app.post('/register',(req,res)=>{
 
-    let publicKey,privateKey;
-    [publicKey,privateKey] = createRegisterWallet();
-    userData=req.body; //to save into db
 
-
-    res.send([publicKey,privateKey] )
+    userData=req.body;
+    let registeredData=registerAttempt(userData);
+    res.send(registeredData)
     
 })
 
