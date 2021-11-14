@@ -7,9 +7,18 @@ const app = express()
 app.use(express.json());
 const port = 8000
 
+//owner private key here
+const OwnerPrivateKey = ec.keyFromPrivate('d3214895f6ccb5d19228f9f313d02daf6abf73ce910a361c22b26b1b400d147f');
+const OwnerWallet = OwnerPrivateKey.getPublic('hex');
 // Create new instance of Blockchain class
 const IACoin = new Blockchain();
-// Mine first block
+//fa un wallet cu marketcapul maxim.
+//la reward da-le doar ca tranzactii din wallet-ul principal.
+IACoin.miningReward= 1000000;
+IACoin.minePendingTransactions(OwnerWallet);
+IACoin.miningReward= 0;
+console.log(IACoin.getBalanceOfAddress(OwnerWallet));
+
 //db interaction
 
 

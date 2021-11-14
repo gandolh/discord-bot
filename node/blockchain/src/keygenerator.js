@@ -16,10 +16,10 @@ const createRegisterWallet=()=>{
 
 }
 // Print the keys to the console
-console.log();
-console.log('Your public key (also your wallet address, freely shareable)\n', publicKey);
+// console.log();
+// console.log('Your public key (also your wallet address, freely shareable)\n', publicKey);
 
-console.log();
-console.log('Your private key (keep this secret! To sign transactions)\n', privateKey);
+// console.log();
+// console.log('Your private key (keep this secret! To sign transactions)\n', privateKey);
 
 module.exports.createRegisterWallet = createRegisterWallet;
