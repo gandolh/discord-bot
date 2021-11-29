@@ -6,6 +6,7 @@ const register = require('./commands/blockchaincommands/registerblockchain');
 const roll_pacanea  = require('./commands/pacaneacommands/pacanea');
 const barbut = require('./commands/pacaneacommands/barbut')
 const _21 = require('./commands/pacaneacommands/_21')
+const memedealer = require('./commands/memedealer')
 const commands={
     'next': nextlyrics,
     'gif': sendgif,
@@ -13,7 +14,11 @@ const commands={
     'getballance':getBallance,
     'rollpacanea':roll_pacanea,
     'barbut':barbut.init_barbut,
-    '_21':_21.init_21
+    '_21':_21.init_21,
+    'memer':memedealer.memer,
+    'socialize': memedealer.socializer,
+    'animals':memedealer.animals,
+    'generatememe':memedealer.memeGenerator
 }
 
 

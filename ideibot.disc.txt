@@ -1,20 +1,15 @@
 gambling bot cu crypto. ---
 blockchain
-axios - to be updated for fetch
 
 higher/lower
 ============
 alba neagra
 ============
-barbut
-===========
-blackjack
-===========
 
 Find the number in 3 moves
 1 100
 Bigger lower
-Ai trimis
+
 =============
 
 complete lyrics with genius
@@ -23,5 +18,18 @@ Tell me a joke api
 
 NASA api
 
-ramane node
+Eu care voiam sa iti zic ca poti sa bagi chestia aia de "8ball"
+Gen sa intrebi botul cv, si el sa iti dea un raspuns generic...like a fortune teller
+Person: O sa explodeze urmatorul meu startup? 
+Bot: Nu prea cred 
 
+
+Horse races??
+i mean poti sa faci ceva text cu emoteuri de 7 cai si ai 30 de min pana se termina intrarea
+la final pick a random one si ia castigatorul
+
+si facem comanda sa fie >barbut thomas {some coins}
+sau punem taxa fixa de 2 IACOINS
+la _21 la fel?
+si la pacanea?
+doar adaugam un parametru pentru suma?
