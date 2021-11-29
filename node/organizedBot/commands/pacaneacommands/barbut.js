@@ -24,8 +24,11 @@ const play_barbut = (player1_name,player2_name,msg) => {
   let result = "";
   let player_won = "";
   if (p1_roll >= p2_roll) player_won = player1_name;
-  else player_won = player2_name;
-  result = `Jucatorul ${player_won} a castigat`;
+  else {
+    player_won = player2_name;
+    [p1_roll,p2_roll] = [p2_roll,p1_roll]
+  }
+  result = `Jucatorul ${player_won} a castigat cu ${p1_roll} versus ${p2_roll}`;
   msg.channel.send(result)
 };
 
