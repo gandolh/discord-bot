@@ -4,7 +4,7 @@ const init_barbut = (msg, args) => {
   if(player2_name == player1_name)return;
 
   if (player2_name == undefined) {
-    player2_name = "<@!907340300740100106>";
+    player2_name = '<@!'+process.env.OnkUserId+'>';
     play_barbut(player1_name,player2_name,msg);
   } else {
     msg.channel
