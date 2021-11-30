@@ -7,6 +7,7 @@ const roll_pacanea  = require('./commands/pacaneacommands/pacanea');
 const barbut = require('./commands/pacaneacommands/barbut')
 const _21 = require('./commands/pacaneacommands/_21')
 const memedealer = require('./commands/memedealer')
+const rewardPlayer = require('./commands/blockchaincommands/reward')
 const commands={
     'next': nextlyrics,
     'gif': sendgif,
@@ -18,7 +19,8 @@ const commands={
     'memer':memedealer.memer,
     'socialize': memedealer.socializer,
     'animals':memedealer.animals,
-    'generatememe':memedealer.memeGenerator
+    'generatememe':memedealer.memeGenerator,
+    'reward': rewardPlayer
 }
 
 

@@ -1,7 +1,4 @@
-const { Blockchain, Transaction } = require('./blockchain');
-const { createRegisterWallet } = require('./keygenerator.js');
-const EC = require('elliptic').ec;
-const ec = new EC('secp256k1');
+
 const express = require('express')
 const knex = require('knex')({
   client: 'sqlite3',
@@ -11,109 +8,45 @@ const knex = require('knex')({
   },
 });
 
-
-
+const blockchainHelpers = require('./blockchainHelpers')
+const dbHelpers = require('./dbHelpers')
 const app = express()
 app.use(express.json());
 const port = 8000
 
-//owner private key here
-const OwnerKeys = ec.keyFromPrivate('d3214895f6ccb5d19228f9f313d02daf6abf73ce910a361c22b26b1b400d147f');
-const OwnerWallet = OwnerKeys.getPublic('hex');
-// Create new instance of Blockchain class
-const IACoin = new Blockchain();
-const initializeBlockchain = async ()=>{
-
-  IACoin.miningReward= 1000000;
-  IACoin.minePendingTransactions(OwnerWallet);
-  IACoin.miningReward= 0;
-  const selectedRows = await knex('Users')
-  .select('*').where('PublicKey','!=',OwnerWallet)
-  
-  for(let selectedRow of selectedRows){
-    const tx1 = new Transaction(OwnerWallet, selectedRow.PublicKey, 100);
-    console.log(selectedRow.PublicKey)
-    tx1.signTransaction(OwnerKeys);
-    IACoin.addTransaction(tx1);
-  }
-  IACoin.minePendingTransactions(OwnerWallet);
-
-}
-
-initializeBlockchain();
-//db interaction
 
 
 
-const registerAttempt= async(userData)=>{
-  let publicKey,privateKey;
-  [publicKey,privateKey] = createRegisterWallet();
-  let registeredData={
-    'publicKey':publicKey,
-    error:true
-  }
-  let ThiUserRow;
-  ThiUserRow= await knex('Users')
-  .select('*').where('UserId',userData.user_id).first();
-
-  if(ThiUserRow==null){
-    await knex('Users').insert({
-      'UserId': userData.user_id,
-      'PublicKey':publicKey,
-      'PrivateKey': privateKey
-    })
-    // ThiUserRow = await knex('Users')
-    // .select('*').where('UserId',userData.user_id).first();
-    registeredData.error=false;
-    registeredData.publicKey=publicKey
-  }else{
-    registeredData.publicKey = ThiUserRow.PublicKey
-  }
-  
-    // const newUserData = await knex('Users')
-    // .select('*').where(Id==idInsertedRow)
-    return registeredData;
-
-}
-const querries_test= async()=>{
-  const selectedRows = await knex('Users')
-      .select('*')
-    console.log(selectedRows)
-}
-// querries_test();
 
 
 
-//end db interaction
 
 app.all('/', (req, res) => {
     res.send({status:'it\'s alive!'}).status(200)
   })
 
 app.post('/register',async (req,res)=>{
-
-
     userData=req.body;
-    let registeredData= await registerAttempt(userData);
-
+    let registeredData= await blockchainHelpers.registerAttempt(userData);
     res.send(registeredData)
     
 })
 
 
-app.get('/get_ballance',async (req,res)=>{
-    //interogate db to find public key for user with user_id
-    user_id=req.query.user_id;
-    publicKey= await knex('Users')
-    .select('PublicKey').where('UserId',user_id).first();
-    publicKey=publicKey.PublicKey
-    if(publicKey==undefined)
-    res.send('Utilizator neinregistrat. Va rugam introduceti comanda !register')
-    else{
-      const ballance= IACoin.getBalanceOfAddress(publicKey)
-      res.send(ballance.toString())
+app.post('/reward',async( req,res)=>{
+  data=req.body;
+  const toPublicKey = await dbHelpers.GetPublicKey(data.taggedUserId)
+  blockchainHelpers.rewardPlayer(toPublicKey,data.ammount)
+  res.send(`<@!${data.taggedUserId}> a fost recompensat cu ${data.ammount} de catre <@!${data.adminUserId}>`)
+})
 
-    }
+
+app.get('/get_ballance',async (req,res)=>{
+  user_id=req.query.user_id;
+  const toPublicKey = await dbHelpers.GetPublicKey(user_id)
+  resultBallance = await blockchainHelpers.getBallance(toPublicKey);
+  res.send(resultBallance)
+
 })
   app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
