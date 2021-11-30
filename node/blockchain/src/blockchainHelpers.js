@@ -2,6 +2,7 @@ const { Blockchain,Transaction } = require('./blockchain');
 const { createRegisterWallet } = require('./keygenerator');
 const EC = require('elliptic').ec;
 const ec = new EC('secp256k1');
+const fs = require('fs')
 const knex = require('knex')({
   client: 'sqlite3',
   connection: {
@@ -13,24 +14,27 @@ const knex = require('knex')({
 //owner private key here
 const OwnerKeys = ec.keyFromPrivate('d3214895f6ccb5d19228f9f313d02daf6abf73ce910a361c22b26b1b400d147f');
 const OwnerWallet = OwnerKeys.getPublic('hex');
-const IACoin =new Blockchain();
+let IACoin =new Blockchain();
 
 const initializeBlockchain = async ()=>{
-  IACoin.miningReward= 1000000;
-  const { Transaction } = require('./blockchain');
+  // IACoin.miningReward= 1000000;
   
-  IACoin.minePendingTransactions(OwnerWallet);
-  IACoin.miningReward= 0;
-  const selectedRows = await knex('Users')
-  .select('*').where('PublicKey','!=',OwnerWallet)
-  
-  for(let selectedRow of selectedRows){
-    const tx1 = new Transaction(OwnerWallet, selectedRow.PublicKey, 100);
-    tx1.signTransaction(OwnerKeys);
-    IACoin.addTransaction(tx1);
-  }
-  IACoin.minePendingTransactions(OwnerWallet);
-  return IACoin;
+  // IACoin.minePendingTransactions(OwnerWallet);
+  // IACoin.miningReward= 0;
+  // const selectedRows = await knex('Users')
+  // .select('*').where('PublicKey','!=',OwnerWallet)
+  // for(let selectedRow of selectedRows){
+  //   const tx1 = new Transaction(OwnerWallet, selectedRow.PublicKey, 100);
+  //   tx1.signTransaction(OwnerKeys);
+  //   IACoin.addTransaction(tx1);
+  // }
+  // IACoin.minePendingTransactions(OwnerWallet);
+  OldIACoinData = require('../dbs/blockchainData.json')
+  IACoin.chain= OldIACoinData.chain
+  IACoin.difficulty= OldIACoinData.difficulty
+  IACoin.pendingTransactions= OldIACoinData.pendingTransactions
+  IACoin.miningReward= OldIACoinData.miningReward
+
 }
 
 initializeBlockchain();
@@ -87,3 +91,4 @@ module.exports.initializeBlockchain = initializeBlockchain;
 module.exports.registerAttempt = registerAttempt;
 module.exports.rewardPlayer = rewardPlayer;
 module.exports.getBallance = getBallance;
+module.exports.IACoin = IACoin;

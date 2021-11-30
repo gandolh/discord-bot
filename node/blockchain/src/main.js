@@ -7,7 +7,7 @@ const knex = require('knex')({
 
   },
 });
-
+const fs = require('fs')
 const blockchainHelpers = require('./blockchainHelpers')
 const dbHelpers = require('./dbHelpers')
 const app = express()
@@ -48,12 +48,34 @@ app.get('/get_ballance',async (req,res)=>{
   res.send(resultBallance)
 
 })
-  app.listen(port, () => {
+ const server= app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
   })
 
 
-
   // send --- loose send la genesis block
   //borrow/lend from bot
-  //reward --- la conditii
+
+
+  async function exitHandler() {
+    await fs.writeFileSync(
+      "dbs/blockchainData.json",
+      JSON.stringify(blockchainHelpers.IACoin),
+      "utf-8"
+    );
+  }
+  // Catches exit event
+  process.on("exit", exitHandler.bind(null));
+
+  // Catches ctrl+c event
+  process.on("SIGINT", () => {
+    exitHandler();
+    process.exit(-1);
+  });
+
+  // Catches "kill pid" (for example: nodemon restart)
+  process.on("SIGUSR1", exitHandler.bind(null));
+  process.on("SIGUSR2", exitHandler.bind(null));
+
+  // Catches uncaught exceptions
+  process.on("uncaughtException", exitHandler.bind(null));

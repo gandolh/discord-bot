@@ -1,13 +1,15 @@
 const axios = require("axios");
 const rewardPlayer = async (msg, args) => {
+    if (args.length < 2) {
+      msg.channel.send("Va rugam dati tag user-ului de recompensat si o valoare");
+      return;
+    }
+
   const taggedUserId = args[0].slice(3, -1);
   const adminUserId = msg.author.id;
   const ammount = parseInt(args[1]);
-  if (args.length < 2) {
-    msg.channel.send("Va rugam dati tag user-ului de recompensat si o valoare");
-    return;
-  }
-  if (ammount >= 100 || ammount < 0) {
+  
+  if (ammount > 100 || ammount < 0) {
     msg.channel.send("Va rugam alegeti o recompensa intre 0 si 100 IACOIN-uri");
     return;
   }
