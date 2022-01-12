@@ -1,5 +1,3 @@
-gambling bot cu crypto. ---
-blockchain
 
 higher/lower
 ============
@@ -11,6 +9,9 @@ Find the number in 3 moves
 Bigger lower
 
 =============
+pay function to make transactions
+
+
 
 Eu care voiam sa iti zic ca poti sa bagi chestia aia de "8ball"
 Gen sa intrebi botul cv, si el sa iti dea un raspuns generic...like a fortune teller
