@@ -15,8 +15,9 @@ client.on("message", async (msg) => {
 		channel = await client.channels.fetch(process.env.chanellToSend);
 		if (msg.content.slice(1, 13) == "random selea")
 			channel.send({ files: [{ attachment: `./imgs/${Math.floor(Math.random() * 11 + 1)}.jpg` }] });
-		else if (msg.content.slice(1, 5) == "send")
-			channel.send({ files: [{ attachment: `./imgs/${msg.content.slice(6)}.jpg` }] });
-		else channel.send(msg.content.slice(1));
+		else if (msg.content.slice(1, 5) == "send"){
+			channel.send({ files: [{ attachment: `./imgs/${msg.content.slice(6)}` }] });
+        }
+        else channel.send(msg.content.slice(1));
 	}
 });
